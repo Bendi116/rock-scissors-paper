@@ -10,50 +10,56 @@ let choice;
    }
    return choice;
 }
-function playRound(playerChoice, computerChoice,score,score_ai){
-    playerChoice = playerChoice.toLowerCase();
-    if (playerChoice === computerChoice){
-        console.log(`Tie! Player choice: ${playerChoice} and Computer choice: ${computerChoice} are equal.`)
-        return "Tie"
+function playRound(e){
+    let computerChoice = getComputerChoice()
+    let playerChoice = e.target.innerText.toLowerCase( )
+    
+    if(playerScore.innerText < 5 && computerScore.innerText<5){
+        if (playerChoice === computerChoice){
+            resultDiv.innerText=`Tie! Player choice: ${playerChoice} and Computer choice: ${computerChoice} are equal.`
+            
+        }
+        //win conditions
+        else if((playerChoice === "paper" && computerChoice ==="rock")|| 
+            (playerChoice === "rock" && computerChoice ==="scissors") ||
+            (playerChoice === "scissors" && computerChoice ==="paper"))
+            {
+                resultDiv.innerText=`Player win! ${playerChoice} beat ${computerChoice}`
+                playerScore.innerText = addScore(playerScore.innerText);
+                if(playerScore.innerHTML == 5){
+                    resultDiv.innerText="Congratulations! You won the game!"
+                }
+            
+            }
+        //lose condition
+        else{
+            resultDiv.innerText=`Computer win! ${computerChoice} beat ${playerChoice}`
+            computerScore.innerText = addScore(computerScore.innerText);
+            if(computerScore.innerHTML == 5){
+                resultDiv.innerText="Game Over! The computer beat you!"
+            }
+            }
+            
     }
-    //win conditions
-    else if((playerChoice === "paper" && computerChoice ==="rock")|| 
-        (playerChoice === "rock" && computerChoice ==="scissors") ||
-        (playerChoice === "scissors" && computerChoice ==="paper"))
-        {
-        console.log(`Player win! ${playerChoice} beat ${computerChoice}`)
-        return "Win";
-        }
-    //lose condition
-    else{
-        console.log(`Computer win! ${computerChoice} beat ${playerChoice}`)
-        return "Lose";
-        }
+   
+        
 }
 
-function playGame(){
-    //var
-    let score = 0;
-    let score_ai = 0;
 
-
-    for(let i = 0; i < 5;i++){
-        let computerSelection = getComputerChoice();
-        let playerSelection = prompt("Rock, paper, or scissors?");
-        round = playRound(playerSelection,computerSelection,score);
-        if (round === "Win"){
-            score++;
-        }else if(round === "Lose"){
-            score_ai++;
-        }
-    }
-    if(score> score_ai){
-        console.log("You win the game!")
-    }else if(score<score_ai){
-        console.log("Youn lose the game!")
-    }else{
-        console.log("The is draw!")
-    }
+function addScore(score){
+    let newScore = parseInt(score)
+    newScore++;
+    return newScore.toString()
 }
 
-playGame();
+const btns = document.querySelectorAll(".btn")
+let btns_array = Array.from(btns)
+btns_array.forEach(function(btn){
+    btn.addEventListener("click",playRound)
+})
+const resultDiv = document.querySelector(".result")
+const playerScore = document.querySelector(".playerScore")
+const computerScore = document.querySelector(".computerScore")
+
+
+
